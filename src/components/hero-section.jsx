@@ -1,11 +1,17 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { Container } from "./ui/container";
 import { Button } from "./ui/button";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ParticleAnimation } from "./particle-animation";
 import { useEffect, useState } from "react";
+
+const ParticleAnimation = dynamic(() => import("./particle-animation"), {
+  ssr: false,
+  loading: () => <div className="absolute inset-0 bg-black" />,
+});
+
 
 export function HeroSection() {
   const [mounted, setMounted] = useState(false);
@@ -17,7 +23,7 @@ export function HeroSection() {
   return (
     <section className="relative overflow-hidden pt-24 pb-16 md:pt-28 md:pb-20 lg:pt-32 lg:pb-32 min-h-[85vh] flex items-center pointer-events-none">
       {/* Background animation */}
-      {mounted && <ParticleAnimation />}
+      
       
       {/* Gradient overlay for better text readability */}
       <div className="absolute inset-0 bg-gradient-to-t from-background/95 via-background/50 to-background/30 z-0"></div>
