@@ -2,10 +2,10 @@ import { Container } from "../../../components/ui/container";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import React from "react";
+import { getBlogPosts } from "../../../lib/utils";
 
-// In a real app, this would come from a CMS or API
-const blogPosts = [
+// Fallback blog posts data (in case no posts are found)
+const fallbackBlogPosts = [
   {
     title: "The Future of AI in Enterprise Workflow Automation",
     excerpt: "Discover how cutting-edge AI technologies are transforming enterprise workflows, reducing manual tasks by up to 80% and enabling unprecedented business agility.",
@@ -46,95 +46,15 @@ const blogPosts = [
       <p>Organizations that embrace these technologies now will be well-positioned to achieve significant competitive advantages through increased operational efficiency, reduced costs, and improved customer experiences.</p>
     `
   },
-  {
-    title: "Blockchain Technology: Beyond Cryptocurrency",
-    excerpt: "Explore how enterprise blockchain solutions are being used for supply chain transparency, secure identity management, and decentralized finance applications.",
-    date: "May 28, 2023",
-    image: "https://images.unsplash.com/photo-1639322537228-f710d846310a?q=80&w=800&auto=format&fit=crop",
-    slug: "blockchain-beyond-cryptocurrency",
-    categories: ["Blockchain", "Enterprise"],
-    content: `
-      <p>While blockchain technology first gained mainstream attention through cryptocurrencies like Bitcoin, its potential applications extend far beyond digital currencies. Enterprises across industries are now leveraging blockchain's unique capabilities to solve complex business challenges and create new value propositions.</p>
-      
-      <h2>What Makes Blockchain Valuable for Enterprise?</h2>
-      <p>At its core, blockchain technology offers several key attributes that make it valuable for enterprise applications:</p>
-      
-      <ul>
-        <li><strong>Immutability:</strong> Once data is recorded on a blockchain, it cannot be altered or deleted without consensus.</li>
-        <li><strong>Transparency:</strong> All participants in a blockchain network can see the same information.</li>
-        <li><strong>Decentralization:</strong> No single entity has complete control over the system.</li>
-        <li><strong>Security:</strong> Cryptographic techniques protect data integrity and authenticity.</li>
-        <li><strong>Smart Contracts:</strong> Self-executing code that automatically enforces business logic.</li>
-      </ul>
-      
-      <h2>Transformative Enterprise Applications</h2>
-      
-      <h3>Supply Chain Management</h3>
-      <p>Blockchain is being used to create transparent, traceable supply chains where products can be tracked from raw materials to final delivery. This helps combat counterfeiting, verify ethical sourcing claims, and streamline logistics operations.</p>
-      
-      <h3>Identity Management</h3>
-      <p>Secure, self-sovereign identity solutions built on blockchain allow individuals to control their personal data while providing organizations with verified credentials. This reduces fraud, simplifies KYC processes, and enhances privacy.</p>
-      
-      <h3>Financial Services</h3>
-      <p>Beyond cryptocurrencies, blockchain enables faster cross-border payments, automated insurance claims processing, and tokenization of real-world assets like real estate and art.</p>
-      
-      <h2>Challenges and Considerations</h2>
-      <p>While the potential is significant, enterprises must navigate several challenges when implementing blockchain solutions:</p>
-      
-      <ul>
-        <li>Regulatory uncertainty in many jurisdictions</li>
-        <li>Integration with legacy systems</li>
-        <li>Scalability limitations of some blockchain platforms</li>
-        <li>Organizational resistance to decentralized models</li>
-        <li>Energy consumption concerns (primarily for proof-of-work systems)</li>
-      </ul>
-      
-      <h2>Looking Ahead</h2>
-      <p>The enterprise blockchain landscape continues to evolve rapidly. As the technology matures and more organizations gain practical experience with implementation, we expect to see increasingly sophisticated applications that combine blockchain with AI, IoT, and other emerging technologies to create entirely new business models and operational paradigms.</p>
-    `
-  },
-  {
-    title: "Cloud Architecture Best Practices for Enterprise Applications",
-    excerpt: "Learn how to design resilient, scalable, and secure cloud infrastructure that can support your organization's growth while optimizing costs and performance.",
-    date: "April 12, 2023",
-    image: "https://images.unsplash.com/photo-1614064641938-3bbee52942c7?q=80&w=800&auto=format&fit=crop",
-    slug: "cloud-architecture-best-practices",
-    categories: ["Cloud", "Architecture"],
-    content: "Full content for cloud architecture article..."
-  },
-  {
-    title: "The Rise of Edge Computing in Manufacturing",
-    excerpt: "Discover how edge computing is revolutionizing manufacturing processes by enabling real-time data analysis, predictive maintenance, and IoT integration.",
-    date: "March 5, 2023",
-    image: "https://images.unsplash.com/photo-1581092921461-7d65ca45ec1e?q=80&w=800&auto=format&fit=crop",
-    slug: "edge-computing-manufacturing",
-    categories: ["Edge Computing", "Manufacturing"],
-    content: "Full content for edge computing article..."
-  },
-  {
-    title: "Securing Enterprise Data in a Remote-First World",
-    excerpt: "As organizations embrace remote work, learn how to implement robust security protocols that protect sensitive data while enabling seamless collaboration.",
-    date: "February 18, 2023",
-    image: "https://images.unsplash.com/photo-1563013544-824ae1b704d3?q=80&w=800&auto=format&fit=crop",
-    slug: "securing-enterprise-data-remote-work",
-    categories: ["Security", "Remote Work"],
-    content: "Full content for security article..."
-  },
-  {
-    title: "The Business Value of API-First Development",
-    excerpt: "Explore how an API-first approach to software development can increase development speed, improve integration capabilities, and create new business opportunities.",
-    date: "January 22, 2023",
-    image: "https://images.unsplash.com/photo-1516259762381-22954d7d3ad2?q=80&w=800&auto=format&fit=crop",
-    slug: "business-value-api-first-development",
-    categories: ["API", "Development"],
-    content: "Full content for API development article..."
-  },
+  // other fallback posts...
 ];
 
 export function generateMetadata({ params }) {
-  // Unwrap params using React.use()
-  const unwrappedParams = React.use(params);
-  const post = blogPosts.find(post => post.slug === unwrappedParams.slug);
+  // Get blog posts from our utility function or use fallback
+  const posts = getBlogPosts();
+  const blogPosts = posts.length > 0 ? posts : fallbackBlogPosts;
+  
+  const post = blogPosts.find(post => post.slug === params.slug);
   
   if (!post) {
     return {
@@ -149,9 +69,11 @@ export function generateMetadata({ params }) {
 }
 
 export default function BlogPostPage({ params }) {
-  // Unwrap params using React.use()
-  const unwrappedParams = React.use(params);
-  const post = blogPosts.find(post => post.slug === unwrappedParams.slug);
+  // Get blog posts from our utility function or use fallback
+  const posts = getBlogPosts();
+  const blogPosts = posts.length > 0 ? posts : fallbackBlogPosts;
+  
+  const post = blogPosts.find(post => post.slug === params.slug);
   
   if (!post) {
     notFound();
@@ -191,7 +113,7 @@ export default function BlogPostPage({ params }) {
           {/* Featured image */}
           <div className="relative w-full h-[400px] mb-8 rounded-xl overflow-hidden">
             <Image
-              src={post.image}
+              src={post.coverImage || post.image}
               alt={post.title}
               fill
               priority
@@ -199,7 +121,7 @@ export default function BlogPostPage({ params }) {
             />
           </div>
           
-          {/* Post content */}
+          {/* Post content - If content is MDX, render it directly as HTML */}
           <div 
             className="prose prose-lg dark:prose-invert max-w-none"
             dangerouslySetInnerHTML={{ __html: post.content }}
@@ -229,6 +151,10 @@ export default function BlogPostPage({ params }) {
 }
 
 export async function generateStaticParams() {
+  // Get blog posts from our utility function or use fallback
+  const posts = getBlogPosts();
+  const blogPosts = posts.length > 0 ? posts : fallbackBlogPosts;
+  
   return blogPosts.map((post) => ({
     slug: post.slug,
   }));

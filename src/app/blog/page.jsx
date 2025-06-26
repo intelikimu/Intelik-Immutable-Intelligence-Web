@@ -1,13 +1,14 @@
 import { Container } from "../../components/ui/container";
 import BlogCard from "../../components/blog-card";
+import { getBlogPosts } from "../../lib/utils";
 
 export const metadata = {
   title: "Blog | Intelik",
   description: "Read the latest insights on AI, blockchain, cloud architecture, and enterprise software development.",
 };
 
-// Mock blog data (in a real app, this would come from a CMS or API)
-const blogPosts = [
+// Fallback data in case there are no blog posts from getBlogPosts()
+const fallbackPosts = [
   {
     title: "The Future of AI in Enterprise Workflow Automation",
     excerpt: "Discover how cutting-edge AI technologies are transforming enterprise workflows, reducing manual tasks by up to 80% and enabling unprecedented business agility.",
@@ -59,6 +60,10 @@ const blogPosts = [
 ];
 
 export default function BlogPage() {
+  // Get blog posts from our utility function or use fallback
+  const posts = getBlogPosts();
+  const blogPosts = posts.length > 0 ? posts : fallbackPosts;
+    
   return (
     <div className="py-16 md:py-24">
       <Container>
@@ -75,7 +80,14 @@ export default function BlogPage() {
           {blogPosts.map((post) => (
             <BlogCard
               key={post.slug}
-              post={post}
+              post={{
+                title: post.title,
+                excerpt: post.excerpt,
+                date: post.date,
+                image: post.coverImage || post.image,
+                slug: post.slug,
+                categories: post.categories || ["Technology"]
+              }}
             />
           ))}
         </div>

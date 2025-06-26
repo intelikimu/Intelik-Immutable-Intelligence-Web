@@ -36,12 +36,29 @@ const components = {
       {...props}
     />
   ),
-  a: ({ className, ...props }) => (
-    <Link
-      className={cn("font-medium text-accent underline underline-offset-4", className)}
-      {...props}
-    />
-  ),
+  a: ({ className, href, ...props }) => {
+    const isInternalLink = href && (href.startsWith('/') || href.startsWith('#'));
+    
+    if (isInternalLink) {
+      return (
+        <Link
+          href={href}
+          className={cn("font-medium text-accent underline underline-offset-4", className)}
+          {...props}
+        />
+      );
+    }
+    
+    return (
+      <a
+        href={href}
+        className={cn("font-medium text-accent underline underline-offset-4", className)}
+        target="_blank"
+        rel="noopener noreferrer"
+        {...props}
+      />
+    );
+  },
   ul: ({ className, ...props }) => (
     <ul
       className={cn("mb-4 ml-6 list-disc", className)}
@@ -122,6 +139,10 @@ const components = {
 
 export function MDXComponents({ code }) {
   const Component = useMDXComponent(code);
+  
+  if (!Component) {
+    return <div>Error loading MDX content</div>;
+  }
   
   return <Component components={components} />;
 } 
