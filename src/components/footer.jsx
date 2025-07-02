@@ -1,9 +1,10 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { Container } from "./ui/container";
-import { motion } from "framer-motion";
-import { Twitter, Linkedin, Github } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Twitter, Linkedin, Github, Mail, Phone, PhoneCall, MessageSquare } from "lucide-react";
 
 const footerLinks = [
   {
@@ -53,8 +54,30 @@ const socialLinks = [
   },
 ];
 
+const contactInfo = [
+  {
+    label: "Phone",
+    value: "+923470213263",
+    icon: <Phone size={16} />,
+    href: "tel:+923470213263"
+  },
+  {
+    label: "Business Email",
+    value: "business@intelik.net",
+    icon: <Mail size={16} />,
+    href: "mailto:business@intelik.net"
+  },
+  {
+    label: "Contact Email",
+    value: "contact@intelik.net",
+    icon: <Mail size={16} />,
+    href: "mailto:contact@intelik.net"
+  }
+];
+
 export function Footer() {
   const currentYear = new Date().getFullYear();
+  const [activePhone, setActivePhone] = useState(null);
   
   // Animation variants
   const fadeInUp = {
@@ -75,6 +98,20 @@ export function Footer() {
         delayChildren: 0.1
       }
     }
+  };
+
+  const handlePhoneClick = (phone) => {
+    setActivePhone(activePhone === phone ? null : phone);
+  };
+
+  const handleCall = (phone) => {
+    window.location.href = `tel:${phone}`;
+  };
+
+  const handleWhatsApp = (phone) => {
+    // Remove any non-digit characters from the phone number
+    const cleanPhone = phone.replace(/\D/g, '');
+    window.open(`https://wa.me/${cleanPhone}`, '_blank');
   };
 
   return (
@@ -121,6 +158,66 @@ export function Footer() {
             <p className="text-foreground/70 mb-6 max-w-md">
               Enterprise-grade AI automation, blockchain solutions, cloud architecture, and custom software development for forward-thinking organizations.
             </p>
+            
+            {/* Contact Information */}
+            <div className="mb-6 space-y-2">
+              {contactInfo.map((item) => (
+                <div key={item.label} className="relative">
+                  {item.label === "Phone" ? (
+                    <div>
+                      <motion.div
+                        className="flex items-center text-foreground/70 hover:text-indigo-500 transition-colors cursor-pointer"
+                        onClick={() => handlePhoneClick(item.value)}
+                        whileHover={{ x: 2 }}
+                      >
+                        <span className="mr-2 text-indigo-500">{item.icon}</span>
+                        <span>{item.value}</span>
+                      </motion.div>
+                      
+                      <AnimatePresence>
+                        {activePhone === item.value && (
+                          <motion.div 
+                            className="flex mt-2 gap-3"
+                            initial={{ opacity: 0, y: -10, scale: 0.9 }}
+                            animate={{ opacity: 1, y: 0, scale: 1 }}
+                            exit={{ opacity: 0, y: -10, scale: 0.9 }}
+                            transition={{ duration: 0.2 }}
+                          >
+                            <motion.button
+                              onClick={() => handleCall(item.value)}
+                              className="w-8 h-8 rounded-full bg-green-500 text-white flex items-center justify-center shadow-lg hover:bg-green-600"
+                              whileHover={{ scale: 1.1 }}
+                              whileTap={{ scale: 0.95 }}
+                            >
+                              <PhoneCall size={14} />
+                            </motion.button>
+                            <motion.button
+                              onClick={() => handleWhatsApp(item.value)}
+                              className="w-8 h-8 rounded-full bg-emerald-500 text-white flex items-center justify-center shadow-lg hover:bg-emerald-600"
+                              whileHover={{ scale: 1.1 }}
+                              whileTap={{ scale: 0.95 }}
+                            >
+                              <MessageSquare size={14} />
+                            </motion.button>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+                  ) : (
+                    <motion.a
+                      key={item.label}
+                      href={item.href}
+                      className="flex items-center text-foreground/70 hover:text-indigo-500 transition-colors"
+                      whileHover={{ x: 2 }}
+                    >
+                      <span className="mr-2 text-indigo-500">{item.icon}</span>
+                      <span>{item.value}</span>
+                    </motion.a>
+                  )}
+                </div>
+              ))}
+            </div>
+            
             <div className="flex space-x-4">
               {socialLinks.map((item) => (
                 <motion.a

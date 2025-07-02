@@ -91,6 +91,7 @@ export function Navbar() {
   const navLinks = [
     { href: "/", label: "Home" },
     { href: "/services", label: "Services" },
+    { href: "/blockchain", label: "Blockchain" },
     { href: "/solutions/ai", label: "AI Solutions" },
     { href: "/solutions/cloud", label: "Cloud" },
     { href: "/case-studies", label: "Case Studies" },
@@ -111,12 +112,12 @@ export function Navbar() {
       {/* Liquid Glass Effect Container */}
       <div className="relative overflow-hidden">
         {/* Main navbar content */}
-        <div className={`liquid-glass ${isScrolled ? "shadow-lg" : ""}`}>
+        <div className={`liquid-glass ${isScrolled ? "shadow-lg" : ""} relative z-10`}>
           {/* Ripple effects */}
           {rippleEffects.map((ripple) => (
             <div
               key={ripple.id}
-              className="absolute rounded-full bg-accent/30"
+              className="absolute rounded-full bg-accent/30 pointer-events-none"
               style={{
                 left: ripple.x,
                 top: ripple.y,
@@ -141,7 +142,7 @@ export function Navbar() {
             {bubbles.map((bubble, i) => (
               <div 
                 key={i}
-                className="absolute rounded-full bg-accent/20 blur-xl"
+                className="absolute rounded-full bg-accent/20 blur-xl pointer-events-none"
                 style={{
                   width: `${bubble.width}px`,
                   height: `${bubble.height}px`,
@@ -161,9 +162,9 @@ export function Navbar() {
           </div>
 
           {/* Glowing border effect */}
-          <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-accent/50 to-transparent" />
+          <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-accent/50 to-transparent pointer-events-none" />
           
-          <div className="container flex h-16 items-center justify-between px-4 md:px-6">
+          <div className="container flex h-16 items-center justify-between px-4 md:px-6 relative z-10 pointer-events-auto">
             <div className="flex items-center gap-6 md:gap-8 lg:gap-10">
               <Link
                 href="/"
@@ -176,7 +177,7 @@ export function Navbar() {
                 >
                   <span className="gradient-text">Intelik</span>
                   <motion.span 
-                    className="absolute -top-1 -right-1 w-1.5 h-1.5 bg-accent rounded-full"
+                    className="absolute -top-1 -right-1 w-1.5 h-1.5 bg-accent rounded-full pointer-events-none"
                     animate={{ 
                       scale: [1, 1.5, 1],
                       opacity: [0.7, 1, 0.7] 
@@ -217,7 +218,7 @@ export function Navbar() {
               <motion.button
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="block md:hidden p-2 rounded-md border border-border"
+                className="block md:hidden p-2 rounded-md border border-border relative z-20"
                 aria-label="Toggle Menu"
               >
                 <svg

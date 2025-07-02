@@ -102,7 +102,7 @@ export function HeroSection() {
               <p className="text-foreground/50 text-sm mt-1">Users</p>
             </div>
             <div className="text-center">
-              <p className="text-2xl font-light">87+</p>
+              <p className="text-2xl font-light">11+</p>
               <p className="text-foreground/50 text-sm mt-1">Countries</p>
             </div>
             <div className="text-center">

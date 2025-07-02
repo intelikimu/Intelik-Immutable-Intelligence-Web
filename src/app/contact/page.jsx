@@ -1,11 +1,15 @@
+"use client";
+
+import { useState } from "react";
 import { Container } from "../../components/ui/container";
 import ContactForm from "../../components/contact-form";
-import { MapPin, Phone, Mail, Clock } from "lucide-react";
+import { MapPin, Phone, Mail, Clock, PhoneCall, MessageSquare } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
-export const metadata = {
-  title: "Contact Us | Intelik",
-  description: "Get in touch with our team to discuss your enterprise technology needs and how we can help transform your business.",
-};
+// Setting document title via useEffect
+import { useEffect } from "react";
+
+// ...rest of imports
 
 const contactInfo = [
   {
@@ -16,12 +20,13 @@ const contactInfo = [
   {
     icon: Phone,
     title: "Phone",
-    details: ["+92 301 2345678", "+92 321 8765432"],
+    details: ["+923470213263"],
+    actions: true,
   },
   {
     icon: Mail,
     title: "Email",
-    details: ["info@intelik.com", "support@intelik.com"],
+    details: ["business@intelik.net", "contact@intelik.net"],
   },
   {
     icon: Clock,
@@ -31,6 +36,26 @@ const contactInfo = [
 ];
 
 export default function ContactPage() {
+  const [activePhone, setActivePhone] = useState(null);
+  
+  useEffect(() => {
+    document.title = "Contact Us | Intelik";
+  }, []);
+
+  const handlePhoneClick = (phone) => {
+    setActivePhone(activePhone === phone ? null : phone);
+  };
+
+  const handleCall = (phone) => {
+    window.location.href = `tel:${phone}`;
+  };
+
+  const handleWhatsApp = (phone) => {
+    // Remove any non-digit characters from the phone number
+    const cleanPhone = phone.replace(/\D/g, '');
+    window.open(`https://wa.me/${cleanPhone}`, '_blank');
+  };
+
   return (
     <div className="py-16 md:py-24">
       <Container>
@@ -55,11 +80,53 @@ export default function ContactPage() {
                   <div className="w-10 h-10 flex items-center justify-center bg-accent/10 rounded-lg text-accent">
                     <item.icon size={20} />
                   </div>
-                  <div>
+                  <div className="flex-1">
                     <h3 className="font-medium mb-2">{item.title}</h3>
                     <div className="space-y-1 text-muted-foreground">
                       {item.details.map((detail, i) => (
-                        <p key={i}>{detail}</p>
+                        <div key={i} className="relative">
+                          {item.actions ? (
+                            <div className="relative">
+                              <p 
+                                onClick={() => handlePhoneClick(detail)}
+                                className="cursor-pointer hover:text-indigo-500 transition-colors inline-block"
+                              >
+                                {detail}
+                              </p>
+                              
+                              <AnimatePresence>
+                                {activePhone === detail && (
+                                  <motion.div 
+                                    className="flex mt-2 gap-3"
+                                    initial={{ opacity: 0, y: -10, scale: 0.9 }}
+                                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                                    exit={{ opacity: 0, y: -10, scale: 0.9 }}
+                                    transition={{ duration: 0.2 }}
+                                  >
+                                    <motion.button
+                                      onClick={() => handleCall(detail)}
+                                      className="w-10 h-10 rounded-full bg-green-500 text-white flex items-center justify-center shadow-lg hover:bg-green-600"
+                                      whileHover={{ scale: 1.1 }}
+                                      whileTap={{ scale: 0.95 }}
+                                    >
+                                      <PhoneCall size={18} />
+                                    </motion.button>
+                                    <motion.button
+                                      onClick={() => handleWhatsApp(detail)}
+                                      className="w-10 h-10 rounded-full bg-emerald-500 text-white flex items-center justify-center shadow-lg hover:bg-emerald-600"
+                                      whileHover={{ scale: 1.1 }}
+                                      whileTap={{ scale: 0.95 }}
+                                    >
+                                      <MessageSquare size={18} />
+                                    </motion.button>
+                                  </motion.div>
+                                )}
+                              </AnimatePresence>
+                            </div>
+                          ) : (
+                            <p>{detail}</p>
+                          )}
+                        </div>
                       ))}
                     </div>
                   </div>
