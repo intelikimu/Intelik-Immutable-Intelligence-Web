@@ -3,6 +3,7 @@ import "./globals.css";
 import { Navbar } from "../components/navbar";
 import { Footer } from "../components/footer";
 import { ThemeProvider } from "../components/theme-provider";
+import { SmoothScroll } from "../components/smooth-scroll";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -23,26 +24,32 @@ export const metadata = {
   ],
 };
 
+// Disable SSR for Smooth Scrolling
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning className="dark">
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </head>
-      <body className={`${inter.variable} font-sans antialiased`}>
+      <body className={`${inter.variable} font-sans antialiased`} suppressHydrationWarning>
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
-          enableSystem
+          defaultTheme="dark"
+          forcedTheme="dark"
           disableTransitionOnChange
         >
-          {/* Background color base for the gradient theme */}
-          <div className="bg-gradient-to-b from-background to-background min-h-screen flex flex-col">
-            <Navbar />
-            <main className="flex-1 pt-20 relative">{children}</main>
-            <Footer />
-          </div>
+          <SmoothScroll>
+            {/* Background color base for the gradient theme */}
+            <div className="bg-gradient-to-b from-background to-background min-h-screen flex flex-col">
+              <Navbar />
+              <main className="flex-1 pt-20 relative">{children}</main>
+              <Footer />
+            </div>
+          </SmoothScroll>
         </ThemeProvider>
       </body>
     </html>

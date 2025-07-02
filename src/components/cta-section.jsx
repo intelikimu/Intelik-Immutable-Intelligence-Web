@@ -18,13 +18,22 @@ export function CTASection() {
           </p>
           
           <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <Button asChild size="lg">
+            <Button 
+              asChild 
+              size="lg" 
+              className="px-8 py-6 text-base font-medium bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 dark:from-indigo-500 dark:to-violet-500 border-0 rounded-full"
+            >
               <Link href="/contact">
                 Schedule a Consultation
               </Link>
             </Button>
             
-            <Button asChild variant="outline" size="lg">
+            <Button 
+              asChild 
+              variant="outline" 
+              size="lg"
+              className="px-8 py-6 text-base font-medium backdrop-blur-sm border border-indigo-500/20 rounded-full"
+            >
               <Link href="/services">
                 Explore Our Services
               </Link>
