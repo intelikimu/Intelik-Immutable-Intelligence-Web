@@ -4,7 +4,6 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { usePathname } from "next/navigation";
-import Image from "next/image";
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -13,7 +12,7 @@ export function Navbar() {
   const [rippleEffects, setRippleEffects] = useState([]);
   const pathname = usePathname();
   const headerRef = useRef(null);
-
+  
   // Initialize bubbles with fixed default values (no random numbers)
   const [bubbles, setBubbles] = useState([
     { width: 75, height: 75, left: 20, top: 20, duration: 10, delay: 0 },
@@ -42,7 +41,7 @@ export function Navbar() {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
     };
-
+    
     const handleMouseMove = (e) => {
       // Only track mouse position when near the navbar (within 100px of top of page)
       if (e.clientY < 100) {
@@ -58,23 +57,23 @@ export function Navbar() {
           x: e.clientX,
           y: e.clientY
         };
-
+        
         setRippleEffects(prev => [...prev, newRipple]);
-
+        
         // Remove ripple after animation completes
         setTimeout(() => {
           setRippleEffects(prev => prev.filter(ripple => ripple.id !== newRipple.id));
         }, 3000);
       }
     };
-
+    
     // Close mobile menu when route changes
     setIsMobileMenuOpen(false);
-
+    
     window.addEventListener("scroll", handleScroll);
     window.addEventListener("mousemove", handleMouseMove);
     window.addEventListener("click", handleMouseClick);
-
+    
     return () => {
       window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("mousemove", handleMouseMove);
@@ -129,9 +128,9 @@ export function Navbar() {
               <div className="absolute inset-0 rounded-full bg-accent/30 animate-liquid-ripple" />
             </div>
           ))}
-
+          
           {/* Animated liquid bubbles */}
-          <div
+          <div 
             className="absolute inset-0 pointer-events-none"
             style={{
               background: `radial-gradient(circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(99, 102, 241, 0.15) 0%, rgba(99, 102, 241, 0) 70%)`,
@@ -140,7 +139,7 @@ export function Navbar() {
             suppressHydrationWarning
           >
             {bubbles.map((bubble, i) => (
-              <div
+              <div 
                 key={i}
                 className="absolute rounded-full bg-accent/20 blur-xl"
                 style={{
@@ -163,42 +162,29 @@ export function Navbar() {
 
           {/* Glowing border effect */}
           <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-accent/50 to-transparent" />
-
+          
           <div className="container flex h-16 items-center justify-between px-4 md:px-6">
             <div className="flex items-center gap-6 md:gap-8 lg:gap-10">
               <Link
                 href="/"
                 className="flex items-center space-x-2 transition-opacity hover:opacity-80"
               >
-                <motion.div
+                <motion.div 
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="relative flex items-center"
+                  className="font-bold text-xl relative"
                 >
-                  {/* Logo image */}
-                  <div className="relative flex items-center">
-  <div className="absolute inset-0 bg-black/10 rounded-full blur-sm" />
-  <Image
-    src="/images/logo/intelik.png"
-    alt="Intelik Logo"
-    width={180}
-    height={180}
-    className="relative mt-5 object-contain "
-    style={{
-      filter: "drop-shadow(0 0 6px rgba(99, 102, 241, 0.5))"
-    }}
-  />
-</div>
-                  <motion.span
+                  <span className="gradient-text">Intelik</span>
+                  <motion.span 
                     className="absolute -top-1 -right-1 w-1.5 h-1.5 bg-accent rounded-full"
-                    animate={{
+                    animate={{ 
                       scale: [1, 1.5, 1],
-                      opacity: [0.7, 1, 0.7]
+                      opacity: [0.7, 1, 0.7] 
                     }}
-                    transition={{
+                    transition={{ 
                       duration: 2,
                       repeat: Infinity,
-                      ease: "easeInOut"
+                      ease: "easeInOut" 
                     }}
                   />
                 </motion.div>
