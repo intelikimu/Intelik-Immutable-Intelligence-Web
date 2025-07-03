@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Container } from "./ui/container";
 import { motion, AnimatePresence } from "framer-motion";
-import { Twitter, Linkedin, Github, Mail, Phone, PhoneCall, MessageSquare } from "lucide-react";
+import { Mail, Phone, PhoneCall, MessageSquare } from "lucide-react";
 
 const footerLinks = [
   {
@@ -38,29 +38,64 @@ const footerLinks = [
 
 const socialLinks = [
   { 
-    label: "Twitter", 
-    href: "https://twitter.com/intelik", 
-    icon: <Twitter size={16} /> 
+    label: "X", 
+    href: "https://x.com/intelik", 
+    icon: (
+      <svg 
+        xmlns="http://www.w3.org/2000/svg" 
+        width="16" 
+        height="16" 
+        viewBox="0 0 24 24" 
+        fill="currentColor"
+        className="text-[#000000] dark:text-white"
+      >
+        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+      </svg>
+    )
   },
   { 
     label: "LinkedIn", 
     href: "https://linkedin.com/company/intelik", 
-    icon: <Linkedin size={16} /> 
+    icon: (
+      <svg 
+        xmlns="http://www.w3.org/2000/svg" 
+        width="16" 
+        height="16" 
+        viewBox="0 0 24 24" 
+        fill="none" 
+        stroke="#0A66C2" 
+        strokeWidth="2" 
+        strokeLinecap="round" 
+        strokeLinejoin="round"
+      >
+        <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+        <rect x="2" y="9" width="4" height="12"></rect>
+        <circle cx="4" cy="4" r="2"></circle>
+      </svg>
+    )
   },
   { 
     label: "GitHub", 
     href: "https://github.com/intelik", 
-    icon: <Github size={16} /> 
+    icon: (
+      <svg 
+        xmlns="http://www.w3.org/2000/svg" 
+        width="16" 
+        height="16" 
+        viewBox="0 0 24 24" 
+        fill="none" 
+        stroke="#6e5494" 
+        strokeWidth="2" 
+        strokeLinecap="round" 
+        strokeLinejoin="round"
+      >
+        <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+      </svg>
+    )
   },
 ];
 
 const contactInfo = [
-  {
-    label: "Phone",
-    value: "+923470213263",
-    icon: <Phone size={16} />,
-    href: "tel:+923470213263"
-  },
   {
     label: "Business Email",
     value: "business@intelik.net",
@@ -77,7 +112,6 @@ const contactInfo = [
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
-  const [activePhone, setActivePhone] = useState(null);
   
   // Animation variants
   const fadeInUp = {
@@ -100,18 +134,12 @@ export function Footer() {
     }
   };
 
-  const handlePhoneClick = (phone) => {
-    setActivePhone(activePhone === phone ? null : phone);
+  const handleCall = () => {
+    window.location.href = `tel:+923470213263`;
   };
 
-  const handleCall = (phone) => {
-    window.location.href = `tel:${phone}`;
-  };
-
-  const handleWhatsApp = (phone) => {
-    // Remove any non-digit characters from the phone number
-    const cleanPhone = phone.replace(/\D/g, '');
-    window.open(`https://wa.me/${cleanPhone}`, '_blank');
+  const handleWhatsApp = () => {
+    window.open(`https://wa.me/923470213263`, '_blank');
   };
 
   return (
@@ -163,57 +191,15 @@ export function Footer() {
             <div className="mb-6 space-y-2">
               {contactInfo.map((item) => (
                 <div key={item.label} className="relative">
-                  {item.label === "Phone" ? (
-                    <div>
-                      <motion.div
-                        className="flex items-center text-foreground/70 hover:text-indigo-500 transition-colors cursor-pointer"
-                        onClick={() => handlePhoneClick(item.value)}
-                        whileHover={{ x: 2 }}
-                      >
-                        <span className="mr-2 text-indigo-500">{item.icon}</span>
-                        <span>{item.value}</span>
-                      </motion.div>
-                      
-                      <AnimatePresence>
-                        {activePhone === item.value && (
-                          <motion.div 
-                            className="flex mt-2 gap-3"
-                            initial={{ opacity: 0, y: -10, scale: 0.9 }}
-                            animate={{ opacity: 1, y: 0, scale: 1 }}
-                            exit={{ opacity: 0, y: -10, scale: 0.9 }}
-                            transition={{ duration: 0.2 }}
-                          >
-                            <motion.button
-                              onClick={() => handleCall(item.value)}
-                              className="w-8 h-8 rounded-full bg-green-500 text-white flex items-center justify-center shadow-lg hover:bg-green-600"
-                              whileHover={{ scale: 1.1 }}
-                              whileTap={{ scale: 0.95 }}
-                            >
-                              <PhoneCall size={14} />
-                            </motion.button>
-                            <motion.button
-                              onClick={() => handleWhatsApp(item.value)}
-                              className="w-8 h-8 rounded-full bg-emerald-500 text-white flex items-center justify-center shadow-lg hover:bg-emerald-600"
-                              whileHover={{ scale: 1.1 }}
-                              whileTap={{ scale: 0.95 }}
-                            >
-                              <MessageSquare size={14} />
-                            </motion.button>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </div>
-                  ) : (
-                    <motion.a
-                      key={item.label}
-                      href={item.href}
-                      className="flex items-center text-foreground/70 hover:text-indigo-500 transition-colors"
-                      whileHover={{ x: 2 }}
-                    >
-                      <span className="mr-2 text-indigo-500">{item.icon}</span>
-                      <span>{item.value}</span>
-                    </motion.a>
-                  )}
+                  <motion.a
+                    key={item.label}
+                    href={item.href}
+                    className="flex items-center text-foreground/70 hover:text-indigo-500 transition-colors"
+                    whileHover={{ x: 2 }}
+                  >
+                    <span className="mr-2 text-indigo-500">{item.icon}</span>
+                    <span>{item.value}</span>
+                  </motion.a>
                 </div>
               ))}
             </div>
@@ -225,13 +211,37 @@ export function Footer() {
                   href={item.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-8 h-8 flex items-center justify-center rounded-full border border-indigo-500/20 text-indigo-500 hover:bg-indigo-500/10 hover:border-indigo-500/40 transition-colors duration-300"
+                  className="w-8 h-8 flex items-center justify-center rounded-full border border-indigo-500/20 bg-white/5 dark:bg-black/5 hover:bg-indigo-500/10 hover:border-indigo-500/40 transition-colors duration-300"
                   whileHover={{ scale: 1.1, rotate: 5 }}
                   whileTap={{ scale: 0.95 }}
                 >
                   {item.icon}
                 </motion.a>
               ))}
+              <motion.button
+                onClick={handleCall}
+                className="w-8 h-8 flex items-center justify-center rounded-full border border-indigo-500/20 bg-white/5 dark:bg-black/5 hover:bg-indigo-500/10 hover:border-indigo-500/40 transition-colors duration-300"
+                whileHover={{ scale: 1.1, rotate: 5 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <PhoneCall size={14} className="text-green-500" />
+              </motion.button>
+              <motion.button
+                onClick={handleWhatsApp}
+                className="w-8 h-8 flex items-center justify-center rounded-full border border-indigo-500/20 bg-white/5 dark:bg-black/5 hover:bg-indigo-500/10 hover:border-indigo-500/40 transition-colors duration-300"
+                whileHover={{ scale: 1.1, rotate: 5 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="#25D366"
+                >
+                  <path fillRule="evenodd" clipRule="evenodd" d="M20.5027 3.48903C18.2579 1.24324 15.2568 0 12.0644 0C5.46761 0 0.129867 5.33774 0.129867 11.9345C0.129867 14.0402 0.708177 16.0937 1.80584 17.8909L0 24L6.25159 22.2366C7.98325 23.2437 9.99865 23.7749 12.0588 23.7749H12.0644C18.6556 23.7749 24 18.4372 24 11.8402C24 8.64775 22.7475 5.73482 20.5027 3.48903ZM12.0644 21.7804C10.2612 21.7804 8.49681 21.2708 6.97521 20.3108L6.61582 20.0937L2.86943 21.1323L3.92468 17.4756L3.68538 17.1056C2.63013 15.5253 2.07453 13.7595 2.07453 11.9345C2.07453 6.43549 6.56539 1.99449 12.07 1.99449C14.7139 1.99449 17.1921 3.01126 19.0401 4.85939C20.8882 6.70752 21.9111 9.18571 21.9054 11.8402C21.9054 17.3449 17.5689 21.7804 12.0644 21.7804ZM17.5295 14.4102C17.2326 14.2617 15.7616 13.5402 15.4872 13.4388C15.2128 13.3374 15.0103 13.2866 14.8022 13.5836C14.5997 13.8805 14.0272 14.5513 13.8472 14.7538C13.6672 14.9619 13.4816 14.9873 13.1847 14.8388C12.8878 14.6902 11.9165 14.3679 10.7712 13.3431C9.87468 12.5423 9.27748 11.5606 9.09189 11.2637C8.9119 10.9667 9.0694 10.8013 9.22689 10.6472C9.36629 10.5077 9.53629 10.2842 9.69378 10.1042C9.85128 9.92424 9.90228 9.79744 10.0037 9.58934C10.1051 9.38684 10.0541 9.20684 9.97768 9.05834C9.90228 8.90984 9.30508 7.43884 9.05018 6.84504C8.80088 6.26684 8.54598 6.34224 8.35478 6.33124C8.17478 6.32024 7.96668 6.32024 7.76418 6.32024C7.56168 6.32024 7.23688 6.39564 6.96248 6.69264C6.68808 6.98964 5.91658 7.71114 5.91658 9.18214C5.91658 10.6532 6.98908 12.0727 7.14658 12.2752C7.30408 12.4777 9.27188 15.5141 12.2892 16.8066C13.0551 17.1431 13.6559 17.3456 14.1261 17.4976C14.9031 17.7496 15.6127 17.7101 16.1773 17.6341C16.8089 17.5496 18.0048 16.9109 18.2652 16.2171C18.5256 15.5233 18.5256 14.9295 18.4502 14.7594C18.3748 14.5894 18.1723 14.4917 17.8754 14.3431L17.5295 14.4102Z" />
+                </svg>
+              </motion.button>
             </div>
           </motion.div>
 
