@@ -209,12 +209,13 @@ export function PartnersSection() {
           <div className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gradient-to-l from-background to-transparent w-20 h-full pointer-events-none z-10" />
           <div className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gradient-to-r from-background to-transparent w-20 h-full pointer-events-none z-10" />
 
-           <div className="pointer-events-auto px-2">
-             <div className="flex items-center justify-start gap-4 md:gap-6 lg:gap-8 overflow-x-auto scroll-smooth py-4 custom-scrollbar">
-              {partners.map((partner, index) => (
+           <div className="pointer-events-auto border px-2">
+            <div className="relative overflow-hidden py-4 group">
+              <div className="flex items-center gap-4 md:gap-6 lg:gap-8 animate-partners-marquee">
+             {partners.concat(partners).map((partner, index) => (
                 <motion.div
                   key={`${partner.name}-${index}`}
-                   className="flex-shrink-0 flex flex-col items-center justify-center gap-3 rounded-2xl border border-indigo-200/50 dark:border-indigo-500/20 bg-white/70 dark:bg-black/20 backdrop-blur-xl cursor-pointer group relative overflow-hidden w-56 md:w-64 lg:w-72 h-40 md:h-44 lg:h-48"
+                   className="flex-shrink-0  flex flex-col items-center justify-center gap-3 rounded-2xl border border-indigo-200/50 dark:border-indigo-500/20 bg-white/70 dark:bg-black/20 backdrop-blur-xl cursor-pointer group relative overflow-hidden w-56 md:w-64 lg:w-72 h-40 md:h-44 lg:h-48"
                   variants={itemVariants}
                    initial="hidden"
                    animate="visible"
@@ -267,8 +268,9 @@ export function PartnersSection() {
                        </motion.div>
                      )}
                    </AnimatePresence>
-                </motion.div>
-              ))}
+                 </motion.div>
+               ))}
+              </div>
             </div>
           </div>
 
@@ -370,6 +372,19 @@ export function PartnersSection() {
           height: 0;
           width: 0;
           background: transparent;
+        }
+        /* Infinite marquee animation */
+        .animate-partners-marquee {
+          width: max-content;
+          animation: partners-marquee 28s linear infinite;
+          will-change: transform;
+        }
+        .group:hover .animate-partners-marquee {
+          animation-play-state: paused;
+        }
+        @keyframes partners-marquee {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
         }
       `}</style>
     </section>
